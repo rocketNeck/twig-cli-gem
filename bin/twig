@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
-require './lib/twig'
+require "bundler/setup"
+require "twig"
+
 
 Twig::CLI.new.call

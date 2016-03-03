@@ -1,2 +1,8 @@
-require_relative "./twig/version"
+require 'nokogiri'
+require 'open-uri'
+require 'geocoder'
+require 'pry'
+require_relative './twig/version'
 require_relative './twig/cli'
+require_relative './twig/list_manager'
+require_relative './twig/post'
