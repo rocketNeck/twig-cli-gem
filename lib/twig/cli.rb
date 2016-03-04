@@ -1,49 +1,78 @@
 #cli controller
 
 class Twig::CLI
+  attr_accessor :list_manager
 
   def call
-    puts "Welcome to TWIG"
-    list_new_posts   #1 start process adn
-    menu  #bring up short menu of choices and opperate on the list
+    puts "---------------------------------------------------------------------"
+    puts "|                 Welcome to TWIG!   Job Posts for Rubists          |"
+    puts "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+    self.list_manager = Twig::ListManager.new   #1 start process adn
+    self.list_manager.create_posts
+    self.list_manager.list_posts("new")
+    menu
   end
 
-  def list_new_posts #fires of a request to List::Manager to get job listing
-  #  list =  Twig::ListManager.recent_list
-  #  list.each_with_index(1) do |val, i|
-    #  puts "#{i}) #{val.description} \n#{val.location}\n#{val.url}"
-  #  end
+  def choices
+    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&^"
+    puts "|                Please type an option.                             |"
+    puts "| save a post |  find by city    |   see saved    |    exit         |"
+    puts "|   delete a saved post   |  get new job posts  |      help         |"
+    puts "---------------------------------------------------------------------"
   end
 
-
-  #loop where the cli is functiioning
   def menu
-    puts "Please type an option."
-    puts "| save a post | find by zip | see saved | exit |"
+    self.choices
+    input = true
+    while input
+      input = gets.strip
 
-    input = gets.strip
-    while input.downcase != "exit"
-      if input == "save a post"
-        puts "Select a post to save."
-        post = gets.strip
-      #  save_post(post)#<---------------choose a job and save it
-      elsif input == "find nearest"
-        puts "Input a zip code for where you want to search around."
-        zip = gets.strip
-    #    get_jobs_near(zip)#<-------------- use zip to get postings nearest the zip
-      elsif input == "exit"
-        puts "Okay, check again soon."
+      case input
+      when "save a post"
+        puts "Select a post to save by number."
+        post = gets.chomp
+        self.list_manager.save_a_post(post)
+        choices
+      when "find by city"
+        puts "Input a city where you want to search for jobs."
+        c = gets.strip
+        self.list_manager.create_posts(c)
+        self.list_manager.list_posts("new")
+        choices
+      when "see saved"
+        self.list_manager.list_posts("saved")
+        choices
+      when "delete a saved post"
+        self.list_manager.list_posts("saved")
+        puts "Select a post to delete. It's perminent."
+        delete = gets.chomp
+        self.list_manager.delete_saved_post(delete)
+        choices
+      when "get new job posts"
+        self.list_manager.create_posts
+        self.list_manager.list_posts("new")
+        choices
+      when "help"
+        self.help
+      when "exit"
+        puts "thanks!!!!!!!"
+        input = false
+      else
+        puts "Not a valid choice."
       end
     end
   end
 
-  def look_up_saved_locations
-
+  def help
+    puts <<-HELP
+            save a post - Choose a job post and add it to a saved list.
+            find by zip - Use a zip to find jobs near that location.
+            see saved - View your saved list
+            delete  a saved post - Remove a list item from your saved list.
+            get new job posts - Refresh, for most recent job listings.
+            exit - exit program
+            HELP
   end
-
-  def look_up_new_locations
-  end
-
   def goodbye
     puts "Thank you for using."
   end

@@ -30,3 +30,8 @@ end
 
 class MapChecker
 end
+
+posts = [
+  {title: title, description: description, location: location, time: time, company: company}
+  {title: title, escription: description, lcation: location, time: tme, company: compny}
+]
